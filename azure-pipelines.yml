@@ -31,11 +31,6 @@ jobs:
         provider: 'aws'
         command: 'apply'
         environmentServiceNameAWS: 'amazon-console-azure'
-    - task: TerraformTaskV2@2
-      inputs:
-        provider: 'aws'
-        command: 'destroy'
-        environmentServiceNameAWS: 'amazon-console-azure'
 - job: waitForValidation
   displayName: Wait for external validation  
   pool: server    
