@@ -1,46 +1,60 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+pool: 
+   vmImage: ubuntu-latest
 
-trigger:
-- main
-
-pool:
-  vmImage: ubuntu-latest
-
-steps:
-- task: TerraformInstaller@0
-  inputs:
-    terraformVersion: 'latest'
-- task: TerraformTaskV2@2
-  inputs:
-    provider: 'aws'
-    command: 'init'
-    backendServiceAWS: 'amazon-console-azure'
-    backendAWSBucketName: 'devops-pin-terraform-files'
-    backendAWSKey: 'ec2'
-- task: TerraformTaskV2@2
-  inputs:
-    provider: 'aws'
-    command: 'validate'
-- task: TerraformTaskV2@2
-  inputs:
-    provider: 'aws'
-    command: 'plan'
-    environmentServiceNameAWS: 'amazon-console-azure'
-- task: TerraformTaskV2@2
-  inputs:
-    provider: 'azurerm'
-    command: 'destroy'
-    environmentServiceNameAzureRM: 'Azure subscription 1(de008ed5-a310-46f4-8399-b2f6ff3c3f21)'
-- task: ManualValidation@0
-  inputs:
-    notifyUsers: 'erikavacacelaeb@gmail.com'
-    instructions: 'Please verify your resources before to destroy'
-    onTimeout: 'resume'
-- task: TerraformTaskV2@2
-  inputs:
-    provider: 'aws'
-    command: 'destroy'
-    environmentServiceNameAWS: 'amazon-console-azure'
+jobs:
+- job: createEc2Resources
+  displayName: Create ec2 resources
+  pool: 
+    vmImage: ubuntu-latest
+  steps:
+    - task: TerraformInstaller@0
+      inputs:
+        terraformVersion: 'latest'
+    - task: TerraformTaskV2@2
+      inputs:
+        provider: 'aws'
+        command: 'init'
+        backendServiceAWS: 'amazon-console-azure'
+        backendAWSBucketName: 'devops-pin-terraform-files'
+        backendAWSKey: 'ec2'
+    - task: TerraformTaskV2@2
+      inputs:
+        provider: 'aws'
+        command: 'validate'
+    - task: TerraformTaskV2@2
+      inputs:
+        provider: 'aws'
+        command: 'plan'
+        environmentServiceNameAWS: 'amazon-console-azure'
+    - task: TerraformTaskV2@2
+      inputs:
+        provider: 'aws'
+        command: 'apply'
+        environmentServiceNameAWS: 'amazon-console-azure'
+    - task: TerraformTaskV2@2
+      inputs:
+        provider: 'aws'
+        command: 'destroy'
+        environmentServiceNameAWS: 'amazon-console-azure'
+- job: waitForValidation
+  displayName: Wait for external validation  
+  pool: server    
+  timeoutInMinutes: 4320 # job times out in 3 days
+  steps:   
+   - task: ManualValidation@0
+     timeoutInMinutes: 1440 # task times out in 1 day
+     inputs:
+         notifyUsers: |
+            erikavacacelaeb@gmail.com
+         instructions: 'Please validate the resources before to destroy'
+         onTimeout: 'resume'
+- job: destroyEc2Resources
+  displayName: Destroy ec2 resources
+  pool: 
+    vmImage: ubuntu-latest
+  steps:
+    - task: TerraformTaskV2@2
+      inputs:
+        provider: 'aws'
+        command: 'destroy'
+        environmentServiceNameAWS: 'amazon-console-azure'
