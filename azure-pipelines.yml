@@ -40,6 +40,7 @@ jobs:
   displayName: Wait for external validation  
   pool: server    
   timeoutInMinutes: 4320 # job times out in 3 days
+  dependsOn: createEc2Resources
   steps:   
    - task: ManualValidation@0
      timeoutInMinutes: 1440 # task times out in 1 day
@@ -50,6 +51,7 @@ jobs:
          onTimeout: 'resume'
 - job: destroyEc2Resources
   displayName: Destroy ec2 resources
+  dependsOn: waitForValidation
   pool: 
     vmImage: ubuntu-latest
   steps:
