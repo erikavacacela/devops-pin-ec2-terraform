@@ -1,0 +1,46 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: TerraformInstaller@0
+  inputs:
+    terraformVersion: 'latest'
+- task: TerraformTaskV2@2
+  inputs:
+    provider: 'aws'
+    command: 'init'
+    backendServiceAWS: 'amazon-console-azure'
+    backendAWSBucketName: 'devops-pin-terraform-files'
+    backendAWSKey: 'ec2'
+- task: TerraformTaskV2@2
+  inputs:
+    provider: 'aws'
+    command: 'validate'
+- task: TerraformTaskV2@2
+  inputs:
+    provider: 'aws'
+    command: 'plan'
+    environmentServiceNameAWS: 'amazon-console-azure'
+- task: TerraformTaskV2@2
+  inputs:
+    provider: 'azurerm'
+    command: 'destroy'
+    environmentServiceNameAzureRM: 'Azure subscription 1(de008ed5-a310-46f4-8399-b2f6ff3c3f21)'
+- task: ManualIntervention@8
+  inputs:
+    instructions: 'Click to destroy resources'
+    emailRecipients: 'erikavacacelaeb@gmail.com'
+    onTimeout: 'resume'
+- task: TerraformTaskV2@2
+  inputs:
+    provider: 'aws'
+    command: 'destroy'
+    environmentServiceNameAWS: 'amazon-console-azure'
