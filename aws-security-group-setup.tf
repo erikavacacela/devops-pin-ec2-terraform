@@ -1,12 +1,12 @@
-resource "aws_security_group" "devops-pin-sg" {
-  name = "devops-pin-sg"
+resource "aws_security_group" "devops-brain-sg" {
+  name = "devops-brain-sg"
   description = "Web Security Group"
   ingress {
-    from_port = 80
-    to_port = 80
+    from_port = 8080
+    to_port = 8080
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    description = "To accept 80 request http"
+    description = "To accept 8080 request http"
   }
   ingress {
     from_port = 22

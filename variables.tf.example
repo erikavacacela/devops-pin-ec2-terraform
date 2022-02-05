@@ -1,0 +1,7 @@
+variable "aws_access_key" {
+  default = "REPLACE_WITH_AWS_KEY_ID"
+}
+
+variable "aws_access_secret" {
+  default = "REPLACE_WITH_AWS_KEY_SECRET"
+}
