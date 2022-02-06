@@ -11,6 +11,7 @@ jobs:
       inputs:
         terraformVersion: 'latest'
     - task: TerraformTaskV2@2
+      displayName: Terraform init
       inputs:
         provider: 'aws'
         command: 'init'
@@ -18,15 +19,18 @@ jobs:
         backendAWSBucketName: 'devops-pin-terraform-files'
         backendAWSKey: 'ec2'
     - task: TerraformTaskV2@2
+      displayName: Terraform validate
       inputs:
         provider: 'aws'
         command: 'validate'
     - task: TerraformTaskV2@2
+      displayName: Terraform plan
       inputs:
         provider: 'aws'
         command: 'plan'
         environmentServiceNameAWS: 'amazon-console-azure'
     - task: TerraformTaskV2@2
+      displayName: Terraform apply
       inputs:
         provider: 'aws'
         command: 'apply'
@@ -51,6 +55,7 @@ jobs:
     vmImage: ubuntu-latest
   steps:
     - task: TerraformTaskV2@2
+      displayName: Terraform destroy
       inputs:
         provider: 'aws'
         command: 'destroy'

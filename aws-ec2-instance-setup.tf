@@ -16,7 +16,7 @@ provider "aws" {
 resource "aws_instance" "ec2-brain-devops" {
   ami = "ami-04505e74c0741db8d"
   instance_type = "t2.micro"
-  key_name = "aws_key"
+  key_name = aws_key_pair.aws_key.key_name
   user_data = "${file("ec2_user_data.sh")}"
   iam_instance_profile = aws_iam_instance_profile.ec2-profile-brain.name
 
