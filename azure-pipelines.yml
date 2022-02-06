@@ -23,18 +23,25 @@ jobs:
       inputs:
         provider: 'aws'
         command: 'validate'
+        backendServiceAWS: 'amazon-console-azure'
+        backendAWSBucketName: 'devops-pin-terraform-files'
+        backendAWSKey: 'ec2'
     - task: TerraformTaskV2@2
       displayName: Terraform plan
       inputs:
         provider: 'aws'
         command: 'plan'
-        environmentServiceNameAWS: 'amazon-console-azure'
+        backendServiceAWS: 'amazon-console-azure'
+        backendAWSBucketName: 'devops-pin-terraform-files'
+        backendAWSKey: 'ec2'
     - task: TerraformTaskV2@2
       displayName: Terraform apply
       inputs:
         provider: 'aws'
         command: 'apply'
-        environmentServiceNameAWS: 'amazon-console-azure'
+        backendServiceAWS: 'amazon-console-azure'
+        backendAWSBucketName: 'devops-pin-terraform-files'
+        backendAWSKey: 'ec2'
 - job: waitForValidation
   displayName: Wait for external validation  
   pool: server    
@@ -59,4 +66,6 @@ jobs:
       inputs:
         provider: 'aws'
         command: 'destroy'
-        environmentServiceNameAWS: 'amazon-console-azure'
+        backendServiceAWS: 'amazon-console-azure'
+        backendAWSBucketName: 'devops-pin-terraform-files'
+        backendAWSKey: 'ec2'
