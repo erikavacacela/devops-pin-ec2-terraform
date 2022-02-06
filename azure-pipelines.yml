@@ -18,7 +18,7 @@ jobs:
         commandOptions: '-backend=true -force-copy -get=true -input=false'
         backendServiceAWS: 'amazon-console-azure'
         backendAWSBucketName: 'devops-pin-terraform-files'
-        backendAWSKey: '''ec2/terraform.tfstate'''
+        backendAWSKey: 'ec2/terraform.tfstate'
     - task: TerraformTaskV2@2
       displayName: Terraform plan
       inputs:
@@ -61,7 +61,7 @@ jobs:
         commandOptions: '-backend=true -force-copy -get=true -input=false'
         backendServiceAWS: 'amazon-console-azure'
         backendAWSBucketName: 'devops-pin-terraform-files'
-        backendAWSKey: '''ec2/terraform.tfstate'''
+        backendAWSKey: 'ec2/terraform.tfstate'
     - task: TerraformTaskV2@2
       displayName: Terraform destroy
       inputs:
