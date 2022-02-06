@@ -15,7 +15,7 @@ jobs:
       inputs:
         provider: 'aws'
         command: 'init'
-        commandOptions: '-backend-config="backend=s3"'
+        commandOptions: '-backend=true -force-copy -get=true -input=false'
         backendServiceAWS: 'amazon-console-azure'
         backendAWSBucketName: 'devops-pin-terraform-files'
         backendAWSKey: '''ec2/terraform.tfstate'''
@@ -25,17 +25,12 @@ jobs:
         provider: 'aws'
         command: 'plan'
         environmentServiceNameAWS: 'amazon-console-azure'
-        backendServiceAWS: 'amazon-console-azure'
-        backendAWSBucketName: 'devops-pin-terraform-files'
-        backendAWSKey: '''ec2/terraform.tfstate'''
     - task: TerraformTaskV2@2
+      displayName: Terraform apply
       inputs:
         provider: 'aws'
         command: 'apply'
         environmentServiceNameAWS: 'amazon-console-azure'
-        backendServiceAWS: 'amazon-console-azure'
-        backendAWSBucketName: 'devops-pin-terraform-files'
-        backendAWSKey: '''ec2/terraform.tfstate'''
 - job: waitForValidation
   displayName: Wait for external validation  
   pool: server    
@@ -57,13 +52,19 @@ jobs:
   steps:
     - task: TerraformInstaller@0
       inputs:
-        terraformVersion: 'latest'  
+        terraformVersion: 'latest'
+    - task: TerraformTaskV2@2
+      displayName: Terraform init
+      inputs:
+        provider: 'aws'
+        command: 'init'
+        commandOptions: '-backend=true -force-copy -get=true -input=false'
+        backendServiceAWS: 'amazon-console-azure'
+        backendAWSBucketName: 'devops-pin-terraform-files'
+        backendAWSKey: '''ec2/terraform.tfstate'''
     - task: TerraformTaskV2@2
       displayName: Terraform destroy
       inputs:
         provider: 'aws'
         command: 'destroy'
         environmentServiceNameAWS: 'amazon-console-azure'
-        backendServiceAWS: 'amazon-console-azure'
-        backendAWSBucketName: 'devops-pin-terraform-files'
-        backendAWSKey: '''ec2/terraform.tfstate'''
