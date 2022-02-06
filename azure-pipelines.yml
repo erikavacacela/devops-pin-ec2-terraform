@@ -11,13 +11,12 @@ jobs:
       inputs:
         terraformVersion: 'latest'
     - task: TerraformTaskV2@2
-      displayName: Terraform init
       inputs:
         provider: 'aws'
         command: 'init'
         backendServiceAWS: 'amazon-console-azure'
         backendAWSBucketName: 'devops-pin-terraform-files'
-        backendAWSKey: 'ec2/terraform.tfstate'
+        backendAWSKey: '''ec2/terraform.tfstate'''
     - task: TerraformTaskV2@2
       displayName: Terraform plan
       inputs:
@@ -26,7 +25,7 @@ jobs:
         environmentServiceNameAWS: 'amazon-console-azure'
         backendServiceAWS: 'amazon-console-azure'
         backendAWSBucketName: 'devops-pin-terraform-files'
-        backendAWSKey: 'ec2/terraform.tfstate'
+        backendAWSKey: '''ec2/terraform.tfstate'''
     - task: TerraformTaskV2@2
       inputs:
         provider: 'aws'
@@ -34,7 +33,7 @@ jobs:
         environmentServiceNameAWS: 'amazon-console-azure'
         backendServiceAWS: 'amazon-console-azure'
         backendAWSBucketName: 'devops-pin-terraform-files'
-        backendAWSKey: 'ec2/terraform.tfstate'
+        backendAWSKey: '''ec2/terraform.tfstate'''
 - job: waitForValidation
   displayName: Wait for external validation  
   pool: server    
@@ -65,4 +64,4 @@ jobs:
         environmentServiceNameAWS: 'amazon-console-azure'
         backendServiceAWS: 'amazon-console-azure'
         backendAWSBucketName: 'devops-pin-terraform-files'
-        backendAWSKey: 'ec2/terraform.tfstate'        
+        backendAWSKey: '''ec2/terraform.tfstate'''
