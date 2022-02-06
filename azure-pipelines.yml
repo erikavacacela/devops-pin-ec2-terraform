@@ -11,9 +11,11 @@ jobs:
       inputs:
         terraformVersion: 'latest'
     - task: TerraformTaskV2@2
+      displayName: Terraform init
       inputs:
         provider: 'aws'
         command: 'init'
+        commandOptions: '-backend-config="backend=s3"'
         backendServiceAWS: 'amazon-console-azure'
         backendAWSBucketName: 'devops-pin-terraform-files'
         backendAWSKey: '''ec2/terraform.tfstate'''
